@@ -39,3 +39,4 @@ class Blockchain(object):
     @property
     def get_last_block(self):
         return self.chain[-1]
+    
