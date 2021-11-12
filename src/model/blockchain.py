@@ -10,13 +10,13 @@ class Blockchain(object):
         self.create_block()
 
 
-    def create_block(self, proof, previous_hash=None):
+    def create_block(self, proof, previous_block_hash=None):
         block = {
             'index': len(self.chain) + 1,
             'timestamp': time(),
             'transactions': self.transactions,
             'proof': proof,
-            'previous_hash': previous_hash
+            'previous_block_hash': previous_block_hash
         }
 
         self.transactions = []
@@ -26,6 +26,9 @@ class Blockchain(object):
 
 
     def create_transaction(self, block: Block):
+        """
+            Creates a new transaction and returns its index.
+        """
         self.transactions.append({
             'sender': block.sender,
             'recipient': block.recipient,

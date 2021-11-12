@@ -1,11 +1,16 @@
 import hashlib
 
 class ProofOfWork():
+
+    @staticmethod
     def proof_of_work(self, last_proof):
+        print('Mining started.')
+
         proof = 0
         while self.valid_proof(last_proof, proof) is False:
             proof += 1
 
+        print('Mining done with success. Proof: ' + proof)
         return proof
 
 
