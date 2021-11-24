@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from flask import Flask, json, request, jsonify
+from flask import Flask, request, jsonify
 
 from utils.validate import Validate
 from utils.hash import Hash
@@ -27,7 +27,7 @@ def new_transaction():
     index = blockchain.create_transaction(block)
 
     response = {
-        'message': 'New transaction added to block ' + index
+        'message': 'New transaction added to block ' + str(index)
     }
 
     return jsonify(response), 201
@@ -73,4 +73,5 @@ def see_chain():
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run(host='0.0.0.0', port=1337)

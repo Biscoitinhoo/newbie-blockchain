@@ -1,13 +1,13 @@
 from time import time
-from block import Block
+from model.block import Block
 
 class Blockchain(object):
     def __init__(self):
         self.chain = []
         self.transactions = []
 
-        # Create first block on the chain (Genesis block)
-        self.create_block()
+        # Create Genesis block.
+        self.create_block(100, 1)
 
 
     def create_block(self, proof, previous_block_hash=None):

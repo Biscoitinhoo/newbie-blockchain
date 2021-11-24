@@ -11,6 +11,8 @@ class ProofOfWork():
             proof += 1
 
         print('Mining done with success. Proof: ' + proof)
+        print('Chain added to the blockchain.')
+        
         return proof
 
 
