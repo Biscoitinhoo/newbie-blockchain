@@ -24,7 +24,7 @@ def see_chain():
         'length': len(blockchain.chain)
     }
 
-    return jsonify(response), 200
+    return json.dumps(response, default=vars), 200
 
 
 @app.route('/transactions/new', methods=['POST'])
@@ -50,7 +50,7 @@ def mine():
     last_proof = last_chain_block['proof']
 
     proof = ProofOfWork()
-    proof.proof_of_work(last_proof)
+    proof.validate_transaction(last_proof)
 
     # Rewarding the miner for validating the transaction.
     block = Block(Constants.REWARDED_MINER, node_identifier, Constants.REWARD_VALUE)
@@ -61,10 +61,9 @@ def mine():
     block = blockchain.create_block(proof, previous_block_hash)
 
     response = {
-        'message': 'New block forged to the chain',
+        'message': 'New block added to the chain',
         'index': block['index'],
         'transactions': block['transactions'],
-        'proof': block['proof'],
         'previous_block_hash': block['previous_block_hash']
     }
 

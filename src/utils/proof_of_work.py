@@ -2,7 +2,7 @@ import hashlib
 
 class ProofOfWork():
 
-    def proof_of_work(self, last_proof):
+    def validate_transaction(self, last_proof):
         print('Mining started.')
 
         proof = 0
