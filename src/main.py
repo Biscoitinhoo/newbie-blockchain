@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from flask import Flask, request, jsonify
+from flask import Flask, json, request, jsonify
 
 from utils.validate import Validate
 from utils.hash import Hash
@@ -14,7 +14,18 @@ from constants.constants import Constants
 app = Flask(__name__)
 blockchain = Blockchain()
 
-node_identifier = str(uuid4())
+node_identifier = str(uuid4()).replace('-', '')
+
+# Blockchain full chain as default path.
+@app.route('/', methods=['GET'])
+def see_chain():
+    response = {
+        'chain': blockchain.chain,
+        'length': len(blockchain.chain)
+    }
+
+    return jsonify(response), 200
+
 
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
@@ -33,19 +44,17 @@ def new_transaction():
     return jsonify(response), 201
 
 
-@app.route('/mining', methods=['GET'])
-def mining():
+@app.route('/mine', methods=['GET'])
+def mine():
     last_chain_block = blockchain.get_last_block
     last_proof = last_chain_block['proof']
 
-    proof = ProofOfWork.proof_of_work(last_proof)
+    proof = ProofOfWork()
+    proof.proof_of_work(last_proof)
 
-    # Rewarding the miner
-    blockchain.create_transaction(
-        sender=Constants.REWARDED_MINER,
-        recipient=node_identifier,
-        amount=Constants.REWARD_VALUE
-    )
+    # Rewarding the miner for validating the transaction.
+    block = Block(Constants.REWARDED_MINER, node_identifier, Constants.REWARD_VALUE)
+    blockchain.create_transaction(block)
 
     # Add mined block to the chain
     previous_block_hash = Hash.hash_block(last_chain_block)
@@ -59,17 +68,7 @@ def mining():
         'previous_block_hash': block['previous_block_hash']
     }
 
-    return jsonify(response), 200
-
-
-@app.route('/chain', methods=['GET'])
-def see_chain():
-    response = {
-        'chain': blockchain.chain,
-        'length': len(blockchain.chain)
-    }
-
-    return jsonify(response), 200
+    return json.dumps(response, default=vars), 200
 
 
 if __name__ == '__main__':

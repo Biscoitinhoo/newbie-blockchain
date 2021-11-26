@@ -7,7 +7,7 @@ class Blockchain(object):
         self.transactions = []
 
         # Create Genesis block.
-        self.create_block(100, 1)
+        self.create_block(proof=100, previous_block_hash=00)
 
 
     def create_block(self, proof, previous_block_hash=None):

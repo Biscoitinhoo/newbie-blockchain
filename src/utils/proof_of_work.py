@@ -2,22 +2,21 @@ import hashlib
 
 class ProofOfWork():
 
-    @staticmethod
     def proof_of_work(self, last_proof):
         print('Mining started.')
 
         proof = 0
-        while self.valid_proof(last_proof, proof) is False:
+        while self.__valid_proof(last_proof, proof) is False:
             proof += 1
 
-        print('Mining done with success. Proof: ' + proof)
+        print('Mining done with success. Proof: ' + str(proof))
         print('Chain added to the blockchain.')
         
         return proof
 
 
     @staticmethod
-    def valid_proof(last_proof, proof):
+    def __valid_proof(last_proof, proof):
         value_to_guess = f'{last_proof}{proof}'.encode()
         guess_hash = hashlib.sha256(value_to_guess).hexdigest()
 
