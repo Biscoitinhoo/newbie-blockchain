@@ -32,7 +32,7 @@ def new_transaction():
     value = request.get_json()
 
     if not Validate.is_valid_request(value):
-        return 'Missing parameters', 400
+        return 'Missing parameters.', 400
 
     block = Block(value['sender'], value['recipient'], value['amount'])
     index = blockchain.create_transaction(block)
